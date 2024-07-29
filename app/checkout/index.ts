@@ -40,13 +40,13 @@ export const checkUrlProduct = async (searchParams: any) => {
   //filter products by variant
   campaignProduct.forEach((product) => {
     console.log("campaignProducts", campaignProducts);
-    campaignProducts.forEach((p) => {
+    campaignProducts.forEach((p:any) => {
       if (p.campaignProductId == product.productId) {
         product.baseProductName = p.baseProductName;
       }
 
       if (product.variantID) {
-        p.variants.forEach((v) => {
+        p.variants.forEach((v:any) => {
           if (v.variantDetailId == product.variantID) {
             product.imageUrl = v.imageUrl;
             product.price = v.price;
