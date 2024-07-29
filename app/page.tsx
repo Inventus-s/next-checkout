@@ -23,7 +23,7 @@ export default function Home() {
                 {/* Express Checkout */}
                 <p className='text-center mb-3' >Express checkout</p>
                 <button className="w-full h-[50px] bg-[#fec43a] rounded flex items-center justify-center ">
-                    <Image priority alt='paypal-image' src={'/images/payment/paypal.png'} width={"130"} height={"50"} className='w-auto h-full' />
+                    <Image placeholder='blur' blurDataURL='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==' priority alt='paypal-image' src={'/images/payment/paypal.png'} width={"130"} height={"50"} className='w-auto h-full' />
                 </button>
                 <Box as='span' className='mt-10'>
                     <p className='relative z-10 text-center w-[60px] bg-white m-auto' >OR</p>
