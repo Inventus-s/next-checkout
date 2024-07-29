@@ -18,8 +18,8 @@ export default function Home() {
 
     return (
         // Main Content
-        <Flex width={"100%"} height={"100vh"} >
-            <div id='formRightSection' className='overflow-auto  w-1/2 p-10 text-[#8f8f8f] text-right border-r-[.5px] border-[#cfcfcf]' >
+        <Flex width={"100%"} height={"100vh"} justify={'center'} >
+            <div id='formRightSection' className='overflow-auto w-[75%] lg:w-1/2 p-10 text-[#8f8f8f] lg:text-right lg:border-r-[.5px] border-r-0 border-[#cfcfcf]' >
                 {/* Express Checkout */}
                 <p className='text-center mb-3' >Express checkout</p>
                 <button className="w-full h-[50px] bg-[#fec43a] rounded flex items-center justify-center ">
@@ -44,7 +44,7 @@ export default function Home() {
                     </Flex>
                 </footer>
             </div>
-            <div id='formRightSection' className='w-[40%] lg:w-1/2 overflow-auto p-10'>
+            <div id='formRightSection' className='w-[40%] hidden lg:w-1/2 lg:block overflow-auto p-10'>
                 <Flex gap={'5'} align={'center'} className='w-full h-fit' >
                     <FormInput placeholder='Discount Code' width='w-full mt-0' />
                     <button type="button" className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-6 py-2.5">Apply</button>
