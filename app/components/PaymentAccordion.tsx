@@ -7,8 +7,8 @@ import FormSelect from "./FormSelect"
 const PaymentAccordion = () => {
     const [isCollapsed, setCollapsed] = useState(false)
     return (
-        <div className="mt-3">
-            <Box as="div">
+        <>
+            <Box as="span" className="mt-3">
                 <h2>
                     <button onClick={() => setCollapsed(false)} type="button" className="flex items-center justify-between w-full p-3 font-medium rtl:text-right text-gray-500 border border-b-0 border-gray-200 rounded-t-xl focus:ring-4 focus:ring-gray-200 hover:bg-gray-100 gap-3">
                         <Flex align={'center'} gap={'3'}>
@@ -19,18 +19,18 @@ const PaymentAccordion = () => {
                     </button>
                 </h2>
                 {!isCollapsed &&
-                    (<div className="p-5 border border-b-0 border-gray-200 bg-[#f4f4f4]" >
+                    (<Box as="span" className="p-5 border border-b-0 border-gray-200 bg-[#f4f4f4]" >
                         <FormInput placeholder="Card Number" width="w-full" />
                         <Flex gap={'5'}>
                             <FormSelect width="w-1/3 appearance-none" />
                             <FormSelect width="w-1/3 appearance-none" />
                             <FormInput placeholder="CVV Code" width="w-1/3" />
                         </Flex>
-                    </div>)
+                    </Box>)
                 }
             </Box>
 
-            <Box as="div">
+            <Box as="span">
                 <h2>
                     <button onClick={() => setCollapsed(true)} type="button" className="flex items-center justify-between w-full p-3 font-medium rtl:text-right text-gray-500 border border-gray-200 focus:ring-4 focus:ring-gray-200 hover:bg-gray-100 gap-3">
                         <Flex align={'center'} gap={'3'}>
@@ -41,12 +41,12 @@ const PaymentAccordion = () => {
                     </button>
                 </h2>
                 {isCollapsed &&
-                    (<div className="p-5 border border-gray-200 bg-[#f4f4f4]">
+                    (<Box as="span" className="p-5 border border-gray-200 bg-[#f4f4f4]">
                         <button type="submit" className="w-full h-[50px] bg-[#fec43a] rounded-full flex items-center justify-center ">
                             <Image alt='paypal-image' src={'/images/payment/paypal.png'} width={"130"} height={"50"} className='w-auto h-full' />
                         </button>
                         <Text as='p' className='text-sm text-center mt-3' >Email and Phone required for Shipping and Order confirmation.</Text>
-                    </div>)
+                    </Box>)
                 }
             </Box>
 
@@ -56,7 +56,7 @@ const PaymentAccordion = () => {
                 </button>)
             }
 
-        </div>
+        </>
     )
 }
 

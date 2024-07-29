@@ -1,11 +1,11 @@
 'use client'
+import { Box, Flex, Text } from '@radix-ui/themes'
 import { useState } from 'react'
 import FormCheckBox from './components/FormCheckBox'
 import FormInput from './components/FormInput'
-import FormLabel from './components/formLabel'
-import { Text, Flex } from '@radix-ui/themes'
 import FormSelect from './components/FormSelect'
 import PaymentAccordion from './components/PaymentAccordion'
+import FormLabel from './components/FormLabel'
 
 const Form = () => {
     const [isChecked, setChecked] = useState(true);
@@ -40,11 +40,11 @@ const Form = () => {
                 <FormSelect width='w-full' />
             </div>
             {/* Payment */}
-            <div className='mt-5'>
+            <Box as='span' className='mt-5'>
                 <FormLabel label='Payment' />
                 <Text as='p' className='text-sm' >All transactions are secure and encrypted.</Text>
                 <PaymentAccordion />
-            </div>
+            </Box>
         </form>
     )
 }

@@ -1,0 +1,22 @@
+import axios from "axios";
+import { NextRequest, NextResponse } from "next/server";
+const query = `https://api.checkoutchamp.com/campaign/query/?loginId=${process.env.CC_LOGIN_ID}&password=${process.env.CC_PASSWORRD}&campaignId=${process.env.CC_CAMPAIGN_ID}`;
+
+export async function POST(request: NextRequest) {
+  const data = await request.json();
+  try {
+    let response = await axios.post(
+      query + `&campaignProductId=${data.join(",")}`
+    );
+    response = await response.data.message.data[process.env.CC_CAMPAIGN_ID];
+    const {products, countries, taxes, coupons, shipProfiles } = response
+    // console.log(products);
+    return NextResponse.json({products, countries, taxes, coupons, shipProfiles});
+    
+  } catch (error) {
+    return NextResponse.json(error);
+  }
+
+//   console.log(response.data);
+//   return NextResponse.json(response.data);
+}

@@ -1,3 +1,4 @@
+'use client'
 import { Box, Flex, Text } from '@radix-ui/themes'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -5,8 +6,13 @@ import Form from './Form'
 import Cart from './components/Cart'
 import FormInput from './components/FormInput'
 import VipDetails from './components/VipDetails'
+import { checkUrlProduct } from './checkout'
 
 export default function Home() {
+    // Check URL Products
+    checkUrlProduct();
+    
+
     return (
         // Main Content
         <Flex width={"100%"} height={"100vh"} >
@@ -16,7 +22,7 @@ export default function Home() {
                 <button className="w-full h-[50px] bg-[#fec43a] rounded flex items-center justify-center ">
                     <Image alt='paypal-image' src={'/images/payment/paypal.png'} width={"130"} height={"50"} className='w-auto h-full' />
                 </button>
-                <Box as='div' className='mt-10'>
+                <Box as='span' className='mt-10'>
                     <p className='relative z-10 text-center w-[60px] bg-white m-auto' >OR</p>
                     <hr className='relative -top-3.5 -z-10 h-[2px] bg-[#cfcfcf]' />
                 </Box>
