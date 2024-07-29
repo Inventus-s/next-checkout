@@ -3,14 +3,14 @@ import { Box, Flex, Text } from '@radix-ui/themes'
 import Image from 'next/image'
 import Link from 'next/link'
 import Form from './Form'
+import { CheckUrlProduct } from './checkout'
 import Cart from './components/Cart'
 import FormInput from './components/FormInput'
 import VipDetails from './components/VipDetails'
-import { checkUrlProduct } from './checkout'
 
 export default function Home() {
     // Check URL Products
-    checkUrlProduct();
+    CheckUrlProduct();
     
 
     return (
@@ -31,7 +31,7 @@ export default function Home() {
                 {/* Footer */}
                 <footer className='mt-10'>
                     <Text color='red' as='p' className='text-left text-xs'>
-                        By proceeding to Shipping updates you agree to Privacy Policy and consent to receive recurring SMS/texts for order confirmations, exclusive offers and early access to new products. You don't need to consent to continue to purchase. You can unsubscribe at any time. Standard message and data rates apply. View Privacy Policy and TOS
+                        By proceeding to Shipping updates you agree to Privacy Policy and consent to receive recurring SMS/texts for order confirmations, exclusive offers and early access to new products. You don&apos;t need to consent to continue to purchase. You can unsubscribe at any time. Standard message and data rates apply. View Privacy Policy and TOS
                     </Text>
                     <Flex className='text-black text-sm mt-5' align={'center'} justify={'center'} gap={'2'}>
                         <Link href={'#'} className='hover:underline'>Terms & Conditions</Link> |
@@ -41,7 +41,7 @@ export default function Home() {
                     </Flex>
                 </footer>
             </div>
-            <div className='w-[40%] lg:w-1/2 overflow-auto p-10'>
+            <div id='formRightSection' className='w-[40%] lg:w-1/2 overflow-auto p-10'>
                 <Flex gap={'5'} align={'center'} className='w-full h-fit' >
                     <FormInput placeholder='Discount Code' width='w-full mt-0' />
                     <button type="button" className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-6 py-2.5">Apply</button>

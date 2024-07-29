@@ -11,7 +11,7 @@ interface Product {
   title?: string;
 }
 
-export const checkUrlProduct = async () => {
+export const CheckUrlProduct = async () => {
   //   console.log("Working");
   const searchParams = useSearchParams();
   let campaignProduct: Product[] = [];
