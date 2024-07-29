@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useSearchParams } from "next/navigation";
 
 interface Product {
   productId: string;
@@ -11,14 +10,13 @@ interface Product {
   title?: string;
 }
 
-export const CheckUrlProduct = async () => {
+export const checkUrlProduct = async (searchParams: any) => {
   //   console.log("Working");
-  const searchParams = useSearchParams();
   let campaignProduct: Product[] = [];
   let campaignProductId: string[] = [];
 
   const products = searchParams.get("products")?.split(";");
-  products?.forEach((item) => {
+  products?.forEach((item:any) => {
     const items = item.split(":");
 
     let variantID;

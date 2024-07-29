@@ -2,16 +2,19 @@
 import { Box, Flex, Text } from '@radix-ui/themes'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useSearchParams } from "next/navigation"
 import Form from './Form'
-import { CheckUrlProduct } from './checkout'
+import { checkUrlProduct } from './checkout'
 import Cart from './components/Cart'
 import FormInput from './components/FormInput'
 import VipDetails from './components/VipDetails'
 
+
 export default function Home() {
     // Check URL Products
-    CheckUrlProduct();
-    
+    const searchParams = useSearchParams();
+    checkUrlProduct(searchParams);
+
 
     return (
         // Main Content
