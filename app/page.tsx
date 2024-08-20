@@ -1,4 +1,4 @@
-'use client'
+// 'use client'
 import { Box, Flex, Text } from '@radix-ui/themes'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -8,12 +8,38 @@ import { checkUrlProduct } from './checkout'
 import Cart from './components/Cart'
 import FormInput from './components/FormInput'
 import VipDetails from './components/VipDetails'
+import { useEffect, useState } from 'react'
+interface Product {
+    productId: string;
+    variantID?: string;
+    productQty: string;
+    baseProductName?: string;
+    imageUrl?: string;
+    price?: string;
+    title?: string;
+}
 
 
-export default function Home() {
+export default async function Home() {
+    
+    // const [isCart, setCart] = useState<Product[]>([]);
     // Check URL Products
-    const searchParams = useSearchParams();
-    checkUrlProduct(searchParams);
+    // const searchParams = useSearchParams();
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         if (searchParams.size > 0) {
+    //             try {
+    //                 const cartData: Product[] = await checkUrlProduct(searchParams);
+    //                 console.log(cartData);
+    //                 setCart(cartData); // Update state with fetched data
+    //             } catch (error) {
+    //                 console.error('Error fetching data:', error);
+    //             }
+    //         }
+    //     };
+
+    //     fetchData();
+    // }, [])
 
 
     return (

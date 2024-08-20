@@ -16,7 +16,7 @@ export const checkUrlProduct = async (searchParams: any) => {
   let campaignProductId: string[] = [];
 
   const products = searchParams.get("products")?.split(";");
-  products?.forEach((item:any) => {
+  products?.forEach((item: any) => {
     const items = item.split(":");
 
     let variantID;
@@ -35,29 +35,33 @@ export const checkUrlProduct = async (searchParams: any) => {
   });
 
   //getCampaignData
-  const data = await axios.post("/api/campaigns", campaignProductId);
-  let campaignProducts = await data.data.products;
-  //filter products by variant
-  campaignProduct.forEach((product) => {
-    console.log("campaignProducts", campaignProducts);
-    campaignProducts.forEach((p:any) => {
-      if (p.campaignProductId == product.productId) {
-        product.baseProductName = p.baseProductName;
-      }
+  try {
+    const data = await axios.post("/api/campaigns", campaignProductId);
+    let campaignProducts = await data.data.products;
+    
+    //filter products by variant
+    campaignProduct.forEach((product) => {
+      campaignProducts.forEach((p: any) => {
+        if (p.campaignProductId == product.productId) {
+          product.baseProductName = p.baseProductName;
+          product.imageUrl = p.imageUrl;
+          product.price = p.price;
+        }
 
-      if (product.variantID) {
-        p.variants.forEach((v:any) => {
-          if (v.variantDetailId == product.variantID) {
-            product.imageUrl = v.imageUrl;
-            product.price = v.price;
-            product.title = v.title;
-          }
-        });
-      } else {
-        product.imageUrl = p.imageUrl;
-        product.price = p.price;
-      }
+        if (product.variantID) {
+          p.variants.forEach((v: any) => {
+            if (v.variantDetailId == product.variantID) {
+              product.imageUrl = v.imageUrl;
+              product.price = v.price;
+              product.title = v.title;
+            }
+          });
+        }
+      });
     });
-  });
-  console.log("campaignProduct", campaignProduct);
+  } catch (error) {
+    console.log("Error aaya");
+  }
+
+  return await campaignProduct;
 };
