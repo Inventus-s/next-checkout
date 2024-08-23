@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
   try {
     const response = fetch(
       query + `&campaignProductId=101`, { cache: 'no-store' }
-    );
+    ).then( res => res.json() );
     return NextResponse.json(response);
     // const responseData: ApiResponse = await response.data.message.data[process.env.CC_CAMPAIGN_ID!];
     // const {products, countries, taxes, coupons, shipProfiles } = responseData
