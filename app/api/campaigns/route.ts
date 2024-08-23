@@ -12,10 +12,10 @@ interface ApiResponse{
 export async function POST(request: NextRequest) {
   // const data = await request.json();
   try {
-    const {data} = await axios.post(
-      query + `&campaignProductId=101`
+    const response = fetch(
+      query + `&campaignProductId=101`, { cache: 'no-store' }
     );
-    return NextResponse.json(data);
+    return NextResponse.json(response);
     // const responseData: ApiResponse = await response.data.message.data[process.env.CC_CAMPAIGN_ID!];
     // const {products, countries, taxes, coupons, shipProfiles } = responseData
     // console.log(products);
