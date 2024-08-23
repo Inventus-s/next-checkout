@@ -24,12 +24,11 @@ interface Product {
 export default async function Home({ searchParams }: { searchParams: { cctester?: string; products?: string } }) {
 
     const { cctester, products } = searchParams;
-    useEffect(() => {
+    if (products) {
         const productsArray: string[] = products!.split(';');
         console.log(cctester, products);
         campaignQuery(productsArray);
-    }, [searchParams])
-
+    }
 
     return (
         // Main Content
