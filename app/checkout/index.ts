@@ -36,7 +36,7 @@ export const checkUrlProduct = async (searchParams: any) => {
 
   //getCampaignData
   try {
-    const data = await axios.post("/api/campaigns", campaignProductId);
+    const data = await axios.post("/CampaignQuery", campaignProductId);
     let campaignProducts = await data.data.products;
     
     //filter products by variant

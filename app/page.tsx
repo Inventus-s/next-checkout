@@ -1,8 +1,8 @@
-// 'use client'
+'use client'
 import { Box, Flex, Text } from '@radix-ui/themes'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useSearchParams } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import Form from './Form'
 import { checkUrlProduct } from './checkout'
 import Cart from './components/Cart'
@@ -20,27 +20,10 @@ interface Product {
 }
 
 
-export default async function Home() {
-    
-    // const [isCart, setCart] = useState<Product[]>([]);
-    // Check URL Products
-    // const searchParams = useSearchParams();
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         if (searchParams.size > 0) {
-    //             try {
-    //                 const cartData: Product[] = await checkUrlProduct(searchParams);
-    //                 console.log(cartData);
-    //                 setCart(cartData); // Update state with fetched data
-    //             } catch (error) {
-    //                 console.error('Error fetching data:', error);
-    //             }
-    //         }
-    //     };
+export default async function Home({ searchParams }: { searchParams: { cctester?: string; products?: string } }) {
 
-    //     fetchData();
-    // }, [])
-
+    const { cctester, products } = searchParams;
+    console.log(cctester, products);
 
     return (
         // Main Content
@@ -71,8 +54,8 @@ export default async function Home() {
                 </footer>
             </div>
             <div id='formRightSection' className='w-[40%] hidden lg:w-1/2 lg:block overflow-auto p-10'>
-                <Flex gap={'5'} align={'center'} className='w-full h-fit' >
-                    <FormInput placeholder='Discount Code' width='w-full mt-0' />
+                <Flex gap={'5'} align={'center'} className='w-full' >
+                    <FormInput placeholder='Discount Code' width='w-full mb-3' />
                     <button type="button" className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-6 py-2.5">Apply</button>
                 </Flex>
                 {/*Cart Table */}
@@ -83,3 +66,10 @@ export default async function Home() {
         </Flex>
     )
 }
+
+const formRightSection = `
+<div id='formRightSection' className='w-[40%] hidden lg:w-1/2 lg:block overflow-auto p-10'>
+                <Flex gap={'5'} align={'center'} className='w-full h-fit' >
+                    <FormInput placeholder='Discount Code' width='w-full mt-0' />
+                    <button type="button" className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-6 py-2.5">Apply</button>
+                </Flex>{/*Cart Table */}<Cart />{/* Vip Box */}<VipDetails /></div>`
