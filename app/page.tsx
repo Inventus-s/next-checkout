@@ -9,6 +9,7 @@ import Cart from './components/Cart'
 import FormInput from './components/FormInput'
 import VipDetails from './components/VipDetails'
 import { useEffect, useState } from 'react'
+import { campaignQuery } from './checkout/common'
 interface Product {
     productId: string;
     variantID?: string;
@@ -23,7 +24,12 @@ interface Product {
 export default async function Home({ searchParams }: { searchParams: { cctester?: string; products?: string } }) {
 
     const { cctester, products } = searchParams;
-    console.log(cctester, products);
+    useEffect(() => {
+        const productsArray: string[] = products!.split(';');
+        console.log(cctester, products);
+        campaignQuery(productsArray);
+    }, [searchParams])
+
 
     return (
         // Main Content
