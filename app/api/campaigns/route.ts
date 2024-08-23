@@ -11,8 +11,13 @@ interface ApiResponse{
 
 export async function POST(request: NextRequest) {
   // const data = await request.json();
+  // Request Methods
+  const requestOptions = {
+    method: "POST",
+    redirect: "follow"
+  };
   try {
-    const response = fetch(
+    const response = await fetch(
       query + `&campaignProductId=101`, { cache: 'no-store' }
     ).then( res => res.json() );
     return NextResponse.json(response);
