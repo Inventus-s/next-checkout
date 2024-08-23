@@ -10,20 +10,21 @@ interface ApiResponse{
 }
 
 export async function POST(request: NextRequest) {
-  const data = await request.json();
+  // const data = await request.json();
   try {
-    let response = await axios.post(
-      query + `&campaignProductId=${data.join(",")}`
+    const {data} = await axios.post(
+      query + `&campaignProductId=101`
     );
-    const responseData: ApiResponse = await response.data.message.data[process.env.CC_CAMPAIGN_ID!];
-    const {products, countries, taxes, coupons, shipProfiles } = responseData
+    return NextResponse.json(data);
+    // const responseData: ApiResponse = await response.data.message.data[process.env.CC_CAMPAIGN_ID!];
+    // const {products, countries, taxes, coupons, shipProfiles } = responseData
     // console.log(products);
-    return NextResponse.json({products, countries, taxes, coupons, shipProfiles});
+    // return NextResponse.json({products, countries, taxes, coupons, shipProfiles});
     
   } catch (error) {
     return NextResponse.json(error);
   }
 
 //   console.log(response.data);
-//   return NextResponse.json(response.data);
+  // return NextResponse.json(response.data);
 }
