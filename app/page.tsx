@@ -1,15 +1,12 @@
-'use client'
+// 'use client'
 import { Box, Flex, Text } from '@radix-ui/themes'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter, useSearchParams } from "next/navigation"
 import Form from './Form'
-import { checkUrlProduct } from './checkout'
+import { campaignQuery } from './checkout/common'
 import Cart from './components/Cart'
 import FormInput from './components/FormInput'
 import VipDetails from './components/VipDetails'
-import { useEffect, useState } from 'react'
-import { campaignQuery } from './checkout/common'
 interface Product {
     productId: string;
     variantID?: string;
@@ -22,13 +19,16 @@ interface Product {
 
 
 export default async function Home({ searchParams }: { searchParams: { cctester?: string; products?: string } }) {
-
+    // const [productsArray, setProductsArray] = useState<string[]>([]);
     const { cctester, products } = searchParams;
     if (products) {
         const productsArray: string[] = products!.split(';');
-        console.log(cctester, products);
-        campaignQuery(productsArray);
+        console.log(productsArray);
+        const { products: productList, countries, currencies, taxes, coupons, shipProfiles } = await campaignQuery();
+        console.log(productList);
     }
+
+
 
     return (
         // Main Content
