@@ -1,4 +1,4 @@
-// 'use client'
+
 import { Box, Flex, Text } from '@radix-ui/themes'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -7,28 +7,59 @@ import { campaignQuery } from './checkout/common'
 import Cart from './components/Cart'
 import FormInput from './components/FormInput'
 import VipDetails from './components/VipDetails'
-interface Product {
-    productId: string;
-    variantID?: string;
-    productQty: string;
-    baseProductName?: string;
-    imageUrl?: string;
-    price?: string;
-    title?: string;
-}
+import { useState } from 'react'
+// interface Product {
+//     productId: string;
+//     variantID?: string;
+//     productQty: string;
+//     baseProductName?: string;
+//     imageUrl?: string;
+//     price?: number;
+//     title?: string;
+// }
 
 
 export default async function Home({ searchParams }: { searchParams: { cctester?: string; products?: string } }) {
-    // const [productsArray, setProductsArray] = useState<string[]>([]);
+    const cartData: object[] = []; // for storing cart data 
     const { cctester, products } = searchParams;
-    if (products) {
+
+    // for storing cart data
+    const handleCartData = async () => {
+        const { products: productList, countries, currencies, taxes, coupons, shipProfiles }: CampaignData = await campaignQuery();
         const productsArray: string[] = products!.split(';');
-        console.log(productsArray);
-        const { products: productList, countries, currencies, taxes, coupons, shipProfiles } = await campaignQuery();
-        console.log(productList);
+        // Map over and filter products
+        productsArray.forEach((item, index) => {
+            // Destruct data
+            const [productId, quantity] = item.split(":");
+            const [productID, variantID = ''] = productId.split('.');
+
+            if (productID) {
+                const campaignProduct = productList.filter(p => p.campaignProductId === Number(productID));
+                if (campaignProduct[0]) {
+                    const product = campaignProduct[0];
+                    let variants: Variant[] = [];
+                    if (variantID) {
+                        variants = product.variants.filter(v => v.variantDetailId === Number(variantID));
+                    }
+                    // Push data to the cart
+                    cartData.push({
+                        campaignProductId: product.campaignProductId,
+                        productName: product.productName,
+                        productType: product.productType,
+                        price: variants[0] ? Number(variants[0].price) * Number(quantity) : Number(product.price) * Number(quantity),
+                        imageUrl: product.imageUrl,
+                        title: variants[0] ? variants[0].title : '',
+                        productQty: quantity
+                    })
+                }
+            }
+        })
     }
 
-
+    if (products) {
+        await handleCartData();
+        console.log(JSON.stringify(cartData, null, 2));
+    }
 
     return (
         // Main Content
@@ -72,9 +103,59 @@ export default async function Home({ searchParams }: { searchParams: { cctester?
     )
 }
 
-const formRightSection = `
-<div id='formRightSection' className='w-[40%] hidden lg:w-1/2 lg:block overflow-auto p-10'>
-                <Flex gap={'5'} align={'center'} className='w-full h-fit' >
-                    <FormInput placeholder='Discount Code' width='w-full mt-0' />
-                    <button type="button" className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-6 py-2.5">Apply</button>
-                </Flex>{/*Cart Table */}<Cart />{/* Vip Box */}<VipDetails /></div>`
+interface Product {
+    campaignProductId: number;
+    productName: string;
+    productType: string;
+    price: string;
+    imageUrl: string;
+    variants: Variant[];
+    // Add other properties of a product
+}
+
+interface Variant {
+    title: string;
+    variantDetailId: number;
+    price: string;
+    // Add other properties of a variant
+}
+
+interface Country {
+    code: string;
+    name: string;
+    // Add other properties of a country
+}
+
+interface Currency {
+    code: string;
+    symbol: string;
+    // Add other properties of a currency
+}
+
+interface Tax {
+    id: string;
+    rate: number;
+    // Add other properties of a tax
+}
+
+interface Coupon {
+    code: string;
+    discount: number;
+    // Add other properties of a coupon
+}
+
+interface ShippingProfile {
+    id: string;
+    name: string;
+    // Add other properties of a shipping profile
+}
+
+interface CampaignData {
+    products: Product[];
+    countries: Country[];
+    currencies: Currency[];
+    taxes: Tax[];
+    coupons: Coupon[];
+    shipProfiles: ShippingProfile[];
+}
+
