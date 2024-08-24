@@ -10,7 +10,10 @@ const nextConfig = {
         destination: '/api/campaigns',
       },
     ];
-  }
+  },
+  images: {
+    domains: ['cdn.shopify.com'],
+  },
 };
 
 export default nextConfig;

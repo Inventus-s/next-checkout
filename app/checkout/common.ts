@@ -21,3 +21,21 @@ export const campaignQuery = async () => {
     return "";
   }
 };
+
+export const calculateSubTotal = async (cartData: CartProduct[]) => {
+  let subTotal = 0;
+  cartData.map((item) => {
+    subTotal += item.price;
+  });
+  return subTotal;
+};
+
+interface CartProduct {
+  campaignProductId: number;
+  productName: string;
+  productType: string;
+  price: number;
+  imageUrl: string;
+  title: string;
+  productQty: string;
+}

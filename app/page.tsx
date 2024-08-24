@@ -1,26 +1,25 @@
-
+'use client'
 import { Box, Flex, Text } from '@radix-ui/themes'
 import Image from 'next/image'
 import Link from 'next/link'
 import Form from './Form'
-import { campaignQuery } from './checkout/common'
+import { calculateSubTotal, campaignQuery } from './checkout/common'
 import Cart from './components/Cart'
+import CartProducts from './components/CartProducts'
 import FormInput from './components/FormInput'
 import VipDetails from './components/VipDetails'
+import { cartTable } from './checkout/data'
 import { useState } from 'react'
-// interface Product {
-//     productId: string;
-//     variantID?: string;
-//     productQty: string;
-//     baseProductName?: string;
-//     imageUrl?: string;
-//     price?: number;
-//     title?: string;
-// }
 
 
 export default async function Home({ searchParams }: { searchParams: { cctester?: string; products?: string } }) {
-    const cartData: object[] = []; // for storing cart data 
+    const cartData: CartProduct[] = []; // for storing cart data 
+    // let cartDetails: CartTable[] = cartTable;
+    const [subTotal, setSubTotal] = useState<number>();
+    const [salesTax, setSalesTax] = useState<number>();
+    const [shipping, setShipping] = useState<number>();
+    const [discount, setDiscount] = useState<number>();
+    const [total, setTotal] = useState<number>();
     const { cctester, products } = searchParams;
 
     // for storing cart data
@@ -56,9 +55,14 @@ export default async function Home({ searchParams }: { searchParams: { cctester?
         })
     }
 
+    const handleSubTotal = async () => {
+        const total = await calculateSubTotal(cartData);
+        setSubTotal(total);
+    }
+
     if (products) {
         await handleCartData();
-        console.log(JSON.stringify(cartData, null, 2));
+        // console.log(JSON.stringify(cartData, null, 2));
     }
 
     return (
@@ -90,17 +94,34 @@ export default async function Home({ searchParams }: { searchParams: { cctester?
                 </footer>
             </div>
             <div id='formRightSection' className='w-[40%] hidden lg:w-1/2 lg:block overflow-auto p-10'>
+                {/* CartData */}
+                <CartProducts cartData={cartData} />
                 <Flex gap={'5'} align={'center'} className='w-full' >
                     <FormInput placeholder='Discount Code' width='w-full mb-3' />
                     <button type="button" className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-6 py-2.5">Apply</button>
                 </Flex>
                 {/*Cart Table */}
-                <Cart />
+                <Cart cartDetails={cartDetails} />
                 {/* Vip Box */}
                 <VipDetails />
             </div>
         </Flex>
     )
+}
+
+interface CartProduct {
+    campaignProductId: number;
+    productName: string;
+    productType: string;
+    price: number;
+    imageUrl: string;
+    title: string;
+    productQty: string;
+}
+
+interface CartTable {
+    name: string;
+    price: number;
 }
 
 interface Product {

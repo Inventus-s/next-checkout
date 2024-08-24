@@ -1,7 +1,10 @@
-import { cartTable } from "../checkout/data"
+interface CartDetail{
+    cartDetails: CartTable[]
+}
 
-const Cart = () => {
-    const cartDetails = cartTable
+const Cart: React.FC<CartDetail> = ({cartDetails}) => {
+    console.log("cartDetails", cartDetails);
+    
     return (
         <table className="w-full mt-5">
             <tbody>
@@ -29,3 +32,8 @@ const Cart = () => {
 }
 
 export default Cart
+
+interface CartTable {
+    name: string;
+    price: number;
+}
