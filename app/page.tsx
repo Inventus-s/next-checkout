@@ -13,7 +13,7 @@ import { cartTable } from './checkout/data'
 export default async function Home({ searchParams }: { searchParams: { cctester?: string; products?: string } }) {
     const { cctester, products } = searchParams;
     let cartData: CartProduct[] = [];
-    let shippingMethod = [];
+    let shippingMethod: {name: string; price: string}[] = [];
     let subTotal = 0;
     let salesTax = 0;
     let shipping = 0;
@@ -177,7 +177,8 @@ interface Coupon {
 
 interface ShippingProfile {
     id: string;
-    name: string;
+    profileName: string;
+    rules: {shipPrice: string}[];
     // Add other properties of a shipping profile
 }
 

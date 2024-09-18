@@ -6,7 +6,7 @@ import FormLabel from './components/FormLabel'
 import FormSelect from './components/FormSelect'
 import PaymentAccordion from './components/PaymentAccordion'
 
-const Form = ({ options }) => {
+const Form = ({ options }: {options: {name: string, price: string}[]}) => {
     // const [isChecked, setChecked] = useState(true);
 
     return (

@@ -23,8 +23,8 @@ const PaymentAccordion = () => {
                     (<Box as="span" className="p-5 border border-b-0 border-gray-200 bg-[#f4f4f4]" >
                         <FormInput placeholder="Card Number" width="w-full" />
                         <Flex gap={'5'}>
-                            <FormSelect width="w-1/3 appearance-none" />
-                            <FormSelect width="w-1/3 appearance-none" />
+                            {/* <FormSelect width="w-1/3 appearance-none" /> */}
+                            {/* <FormSelect width="w-1/3 appearance-none" /> */}
                             <FormInput placeholder="CVV Code" width="w-1/3" />
                         </Flex>
                     </Box>)

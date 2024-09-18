@@ -1,6 +1,6 @@
 import React from 'react'
 
-const FormSelect = ({ width, options, defaultValue}: { width: string; }) => {
+const FormSelect = ({ width, options, defaultValue}: { width: string; options: {name: string, price: string}[]; defaultValue: string; }) => {
 
   return (
     <select id="countries" className={`bg-gray-50 mt-3 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 ${width}`} >
