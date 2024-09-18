@@ -1,4 +1,3 @@
-'use client'
 import { Box, Flex, Text } from '@radix-ui/themes'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -9,26 +8,25 @@ import CartProducts from './components/CartProducts'
 import FormInput from './components/FormInput'
 import VipDetails from './components/VipDetails'
 import { cartTable } from './checkout/data'
-import { useState } from 'react'
 
 
 export default async function Home({ searchParams }: { searchParams: { cctester?: string; products?: string } }) {
-    const cartData: CartProduct[] = []; // for storing cart data 
-    // let cartDetails: CartTable[] = cartTable;
-    const [subTotal, setSubTotal] = useState<number>();
-    const [salesTax, setSalesTax] = useState<number>();
-    const [shipping, setShipping] = useState<number>();
-    const [discount, setDiscount] = useState<number>();
-    const [total, setTotal] = useState<number>();
     const { cctester, products } = searchParams;
+    let cartData: CartProduct[] = [];
+    let shippingMethod = [];
+    let subTotal = 0;
+    let salesTax = 0;
+    let shipping = 0;
+    let discount = 0;
+    let total = 0;
 
-    // for storing cart data
     const handleCartData = async () => {
         const { products: productList, countries, currencies, taxes, coupons, shipProfiles }: CampaignData = await campaignQuery();
         const productsArray: string[] = products!.split(';');
-        // Map over and filter products
-        productsArray.forEach((item, index) => {
-            // Destruct data
+        // const updatedCartData: CartProduct[] = [];
+        // console.log("shipProfiles",JSON.stringify(shipProfiles, null,2));
+        
+        productsArray.forEach((item) => {
             const [productId, quantity] = item.split(":");
             const [productID, variantID = ''] = productId.split('.');
 
@@ -40,30 +38,41 @@ export default async function Home({ searchParams }: { searchParams: { cctester?
                     if (variantID) {
                         variants = product.variants.filter(v => v.variantDetailId === Number(variantID));
                     }
-                    // Push data to the cart
                     cartData.push({
                         campaignProductId: product.campaignProductId,
                         productName: product.productName,
                         productType: product.productType,
                         price: variants[0] ? Number(variants[0].price) * Number(quantity) : Number(product.price) * Number(quantity),
-                        imageUrl: product.imageUrl,
+                        imageUrl: variants[0] ? variants[0].imageUrl : product.imageUrl,
                         title: variants[0] ? variants[0].title : '',
                         productQty: quantity
-                    })
+                    });
+                    subTotal += variants[0] ? Number(variants[0].price) * Number(quantity) : Number(product.price) * Number(quantity); 
+                    // cartDetails.push({
+                    //     name: product.productName,
+                    //     price: variants[0] ? Number(variants[0].price) * Number(quantity) : Number(product.price) * Number(quantity),
+                    // })
+                    // console.log("cartData", cartData);
+
                 }
             }
+        });
+
+        // get shipProfiles
+        shipProfiles.map((item) => {
+            shippingMethod.push({name: item.profileName, price: item.rules[0].shipPrice})
         })
-    }
+        
+    };
 
-    const handleSubTotal = async () => {
-        const total = await calculateSubTotal(cartData);
-        setSubTotal(total);
-    }
-
-    if (products) {
-        await handleCartData();
-        // console.log(JSON.stringify(cartData, null, 2));
-    }
+    await handleCartData();
+    let cartDetails: CartTable[] = [
+        { name: "Subtotal", price: subTotal },
+        { name: "Sales Tax", price: salesTax },
+        { name: "Shipping", price: shipping },
+        { name: "Discount", price: discount },
+        { name: "Total", price: total },
+    ];
 
     return (
         // Main Content
@@ -78,7 +87,7 @@ export default async function Home({ searchParams }: { searchParams: { cctester?
                     <p className='relative z-10 text-center w-[60px] bg-white m-auto' >OR</p>
                     <hr className='relative -top-3.5 -z-10 h-[2px] bg-[#cfcfcf]' />
                 </Box>
-                <Form />
+                <Form options={shippingMethod} />
                 <hr className='h-[2px] bg-[#cfcfcf]' />
                 {/* Footer */}
                 <footer className='mt-10'>
@@ -138,6 +147,7 @@ interface Variant {
     title: string;
     variantDetailId: number;
     price: string;
+    imageUrl: string;
     // Add other properties of a variant
 }
 

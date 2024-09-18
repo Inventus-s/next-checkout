@@ -3,7 +3,6 @@ interface CartDetail{
 }
 
 const Cart: React.FC<CartDetail> = ({cartDetails}) => {
-    console.log("cartDetails", cartDetails);
     
     return (
         <table className="w-full mt-5">

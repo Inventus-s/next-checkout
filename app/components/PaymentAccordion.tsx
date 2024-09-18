@@ -1,8 +1,9 @@
+'use client'
 import { Box, Flex, Radio, Text } from "@radix-ui/themes"
 import Image from "next/image"
-import { useState } from "react"
 import FormInput from "./FormInput"
 import FormSelect from "./FormSelect"
+import { useState } from "react"
 
 const PaymentAccordion = () => {
     const [isCollapsed, setCollapsed] = useState(false)

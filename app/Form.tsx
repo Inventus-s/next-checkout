@@ -1,14 +1,14 @@
-'use client'
+
 import { Box, Flex, Text } from '@radix-ui/themes'
-import { useState } from 'react'
 import FormCheckBox from './components/FormCheckBox'
 import FormInput from './components/FormInput'
+import FormLabel from './components/FormLabel'
 import FormSelect from './components/FormSelect'
 import PaymentAccordion from './components/PaymentAccordion'
-import FormLabel from './components/FormLabel'
 
-const Form = () => {
-    const [isChecked, setChecked] = useState(true);
+const Form = ({ options }) => {
+    // const [isChecked, setChecked] = useState(true);
+
     return (
         <form className='text-left mb-10' >
             {/* Contact */}
@@ -24,7 +24,7 @@ const Form = () => {
             {/* Delivery */}
             <div className='mt-5'>
                 <FormLabel label='Delivery' />
-                <FormSelect width='w-full' />
+                {/* <FormSelect width='w-full' /> */}
                 <Flex align={"center"} gap={"5"}>
                     <FormInput placeholder='First Name' width='w-1/2' />
                     <FormInput placeholder='Last Name' width='w-1/2' />
@@ -33,11 +33,11 @@ const Form = () => {
                 <FormInput placeholder='Address 2' width='w-full' />
                 <Flex align={"center"} gap={"5"} >
                     <FormInput placeholder='Town / City' width='w-1/3' />
-                    <FormSelect width='w-1/3' />
+                    {/* <FormSelect width='w-1/3' /> */}
                     <FormInput placeholder='Postal Code' width='w-1/3' />
                 </Flex>
                 <Text as='p' className='text-black font-medium mt-5' >Shipping Method</Text>
-                <FormSelect width='w-full' />
+                <FormSelect width='w-full' options={options} defaultValue={"Shipping Method"} />
             </div>
             {/* Payment */}
             <Box as='span' className='mt-5'>

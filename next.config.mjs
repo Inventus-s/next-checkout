@@ -3,7 +3,7 @@ const nextConfig = {
   experimental: {
     missingSuspenseWithCSRBailout: false,
   },
-  async rewrites(){
+  async rewrites() {
     return [
       {
         source: '/CampaignQuery',
@@ -12,7 +12,7 @@ const nextConfig = {
     ];
   },
   images: {
-    domains: ['cdn.shopify.com'],
+    domains: ['cdn.shopify.com', "images.konnektive.com"],
   },
 };
 
