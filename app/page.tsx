@@ -1,78 +1,70 @@
+"use client"
 import { Box, Flex, Text } from '@radix-ui/themes'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
+import { campaignQuery, isSameCampaignAndVariant } from '../checkout/common'
 import Form from './Form'
-import { calculateSubTotal, campaignQuery } from './checkout/common'
 import Cart from './components/Cart'
 import CartProducts from './components/CartProducts'
 import FormInput from './components/FormInput'
 import VipDetails from './components/VipDetails'
-import { cartTable } from './checkout/data'
 
 
 export default async function Home({ searchParams }: { searchParams: { cctester?: string; products?: string } }) {
     const { cctester, products } = searchParams;
-    let cartData: CartProduct[] = [];
-    let shippingMethod: {name: string; price: string}[] = [];
+    const [productList, setProductList] = useState([]);
+    const [countriesList, setCountriesList] = useState([]);
+    const [shipProfilesList, setShipProfilesList] = useState([]);
+    const [cartData, setCartData] = useState<CartProduct[]>([]);
+    let shippingMethod: { name: string; price: string }[] = [];
     let subTotal = 0;
     let salesTax = 0;
     let shipping = 0;
     let discount = 0;
     let total = 0;
 
-    const handleCartData = async () => {
-        const { products: productList, countries, currencies, taxes, coupons, shipProfiles }: CampaignData = await campaignQuery();
-        const productsArray: string[] = products!.split(';');
-        // const updatedCartData: CartProduct[] = [];
-        // console.log("shipProfiles",JSON.stringify(shipProfiles, null,2));
-        
-        productsArray.forEach((item) => {
-            const [productId, quantity] = item.split(":");
-            const [productID, variantID = ''] = productId.split('.');
+    useEffect(() => {
+        const response = campaignQuery().then((result) => {
+            const { products: productList, countries, currencies, taxes, coupons, shipProfiles }: CampaignData = result;
+            // setProductList(()=> result.products);
+            const productsArray: string[] = products!.split(';');
 
-            if (productID) {
-                const campaignProduct = productList.filter(p => p.campaignProductId === Number(productID));
-                if (campaignProduct[0]) {
-                    const product = campaignProduct[0];
-                    let variants: Variant[] = [];
-                    if (variantID) {
-                        variants = product.variants.filter(v => v.variantDetailId === Number(variantID));
+            productsArray.forEach((item) => {
+                const [productId, quantity] = item.split(":");
+                const [productID, variantID = ''] = productId.split('.');
+
+                if (productID) {
+                    const campaignProduct = productList.filter(p => p.campaignProductId === Number(productID));
+                    if (campaignProduct[0]) {
+                        const product = campaignProduct[0];
+                        let variants: Variant[] = [];
+                        if (variantID) {
+                            variants = product.variants.filter(v => v.variantDetailId === Number(variantID));
+                        }
+                        console.log("variants", variants);
+                        if (!isSameCampaignAndVariant(cartData, product, variants)) {
+                            cartData.push({
+                                campaignProductId: product.campaignProductId,
+                                productName: product.productName,
+                                productType: product.productType,
+                                variantId: variants[0].variantDetailId,
+                                price: variants[0] ? Number(variants[0].price) * Number(quantity) : Number(product.price) * Number(quantity),
+                                imageUrl: variants[0] ? variants[0].imageUrl : product.imageUrl,
+                                title: variants[0] ? variants[0].title : '',
+                                productQty: quantity
+                            });
+                        }
+                        subTotal += variants[0] ? Number(variants[0].price) * Number(quantity) : Number(product.price) * Number(quantity);
+                        console.log("cartData", cartData);
                     }
-                    cartData.push({
-                        campaignProductId: product.campaignProductId,
-                        productName: product.productName,
-                        productType: product.productType,
-                        price: variants[0] ? Number(variants[0].price) * Number(quantity) : Number(product.price) * Number(quantity),
-                        imageUrl: variants[0] ? variants[0].imageUrl : product.imageUrl,
-                        title: variants[0] ? variants[0].title : '',
-                        productQty: quantity
-                    });
-                    subTotal += variants[0] ? Number(variants[0].price) * Number(quantity) : Number(product.price) * Number(quantity); 
-                    // cartDetails.push({
-                    //     name: product.productName,
-                    //     price: variants[0] ? Number(variants[0].price) * Number(quantity) : Number(product.price) * Number(quantity),
-                    // })
-                    // console.log("cartData", cartData);
-
                 }
-            }
+            });
         });
 
-        // get shipProfiles
-        shipProfiles.map((item) => {
-            shippingMethod.push({name: item.profileName, price: item.rules[0].shipPrice})
-        })
-        
-    };
+    }, [])
 
-    await handleCartData();
-    let cartDetails: CartTable[] = [
-        { name: "Subtotal", price: subTotal },
-        { name: "Sales Tax", price: salesTax },
-        { name: "Shipping", price: shipping },
-        { name: "Discount", price: discount },
-        { name: "Total", price: total },
-    ];
+
 
     return (
         // Main Content
@@ -87,7 +79,7 @@ export default async function Home({ searchParams }: { searchParams: { cctester?
                     <p className='relative z-10 text-center w-[60px] bg-white m-auto' >OR</p>
                     <hr className='relative -top-3.5 -z-10 h-[2px] bg-[#cfcfcf]' />
                 </Box>
-                <Form options={shippingMethod} />
+                <Form />
                 <hr className='h-[2px] bg-[#cfcfcf]' />
                 {/* Footer */}
                 <footer className='mt-10'>
@@ -110,7 +102,7 @@ export default async function Home({ searchParams }: { searchParams: { cctester?
                     <button type="button" className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-6 py-2.5">Apply</button>
                 </Flex>
                 {/*Cart Table */}
-                <Cart cartDetails={cartDetails} />
+                <Cart />
                 {/* Vip Box */}
                 <VipDetails />
             </div>
@@ -122,6 +114,7 @@ interface CartProduct {
     campaignProductId: number;
     productName: string;
     productType: string;
+    variantId: number;
     price: number;
     imageUrl: string;
     title: string;
@@ -178,7 +171,7 @@ interface Coupon {
 interface ShippingProfile {
     id: string;
     profileName: string;
-    rules: {shipPrice: string}[];
+    rules: { shipPrice: string }[];
     // Add other properties of a shipping profile
 }
 

@@ -30,6 +30,18 @@ export const calculateSubTotal = async (cartData: CartProduct[]) => {
   return subTotal;
 };
 
+export function isSameCampaignAndVariant(
+  cartData: CartItem[],
+  product: Product,
+  variants: Variant[]
+): boolean {
+  return cartData.some(
+    (item) =>
+      item.campaignProductId === product.campaignProductId &&
+      item.variantId === variants[0].variantDetailId
+  );
+}
+
 interface CartProduct {
   campaignProductId: number;
   productName: string;
@@ -38,4 +50,30 @@ interface CartProduct {
   imageUrl: string;
   title: string;
   productQty: string;
+}
+
+interface CartItem {
+  campaignProductId: string;
+  productName: string;
+  productType: string;
+  variantId: string;
+  price: number;
+  imageUrl: string;
+  title: string;
+  productQty: number;
+}
+
+interface Product {
+  campaignProductId: string;
+  productName: string;
+  productType: string;
+  price: number;
+  imageUrl: string;
+}
+
+interface Variant {
+  variantDetailId: string;
+  price: number;
+  imageUrl: string;
+  title: string;
 }

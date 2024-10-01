@@ -1,8 +1,11 @@
+import { cartTable } from "../../checkout/data"
+
 interface CartDetail{
     cartDetails: CartTable[]
 }
 
-const Cart: React.FC<CartDetail> = ({cartDetails}) => {
+const Cart = () => {
+    const cartDetails = cartTable
     
     return (
         <table className="w-full mt-5">
