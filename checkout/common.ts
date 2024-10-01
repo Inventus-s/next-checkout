@@ -71,6 +71,14 @@ export const updateSubTotal = (cartData: CartProduct[]) => {
   return subTotal;
 };
 
+export function extractShippingData(profiles) {
+  return profiles.map((profile) => {
+    const { profileName } = profile;
+    const shipPrice = +profile.rules[0]?.shipPrice || "0.00"; // Fallback to "0.00" if rules or shipPrice is missing
+    return { profileName, shipPrice };
+  });
+}
+
 interface CartProduct {
   campaignProductId: number;
   productName: string;

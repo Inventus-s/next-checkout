@@ -6,11 +6,11 @@ import FormLabel from './components/FormLabel'
 import FormSelect from './components/FormSelect'
 import PaymentAccordion from './components/PaymentAccordion'
 
-const Form = () => {
-    const options = [
-        { label: 'Standard Shipping (3-5 Business Days)', value: 'Standard Shipping' },
-        { label: 'Express Shipping (2-3 Business Days)', value: 'Express Shipping' },
-    ]
+const Form = ({shipProfilesList}) => {
+    // const options = [
+    //     { label: 'Standard Shipping (3-5 Business Days)', value: 'Standard Shipping' },
+    //     { label: 'Express Shipping (2-3 Business Days)', value: 'Express Shipping' },
+    // ]
     // const [isChecked, setChecked] = useState(true);
 
     return (
@@ -41,7 +41,7 @@ const Form = () => {
                     <FormInput placeholder='Postal Code' width='w-1/3' />
                 </Flex>
                 <Text as='p' className='text-black font-medium mt-5' >Shipping Method</Text>
-                <FormSelect width='w-full' options={options} defaultValue={"Shipping Method"} />
+                <FormSelect width='w-full' options={shipProfilesList} defaultValue={"Shipping Method"} />
             </div>
             {/* Payment */}
             <Box as='span' className='mt-5'>

@@ -3,7 +3,7 @@ import { Box, Flex, Text } from '@radix-ui/themes'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
-import { campaignQuery, isSameCampaignAndVariant, updateSubTotal } from '../checkout/common'
+import { campaignQuery, extractShippingData, isSameCampaignAndVariant, updateSubTotal } from '../checkout/common'
 import Form from './Form'
 import Cart from './components/Cart'
 import CartProducts from './components/CartProducts'
@@ -15,7 +15,7 @@ export default function Home({ searchParams }: { searchParams: { cctester?: stri
     const { cctester, products } = searchParams;
     const [productList, setProductList] = useState([]);
     const [countriesList, setCountriesList] = useState([]);
-    const [shipProfilesList, setShipProfilesList] = useState([]);
+    const [shipProfilesList, setShipProfilesList] = useState<{ profileName: string, shipPrice: string }[]>([]);
     const [cartData, setCartData] = useState<CartProduct[]>([]);
     let shippingMethod: { name: string; price: string }[] = [];
     const [subTotal, setSubTotal] = useState(0);
@@ -26,6 +26,9 @@ export default function Home({ searchParams }: { searchParams: { cctester?: stri
     useEffect(() => {
         const response = campaignQuery().then((result) => {
             const { products: productList, countries, currencies, taxes, coupons, shipProfiles }: CampaignData = result;
+            // console.log("shipProfiles", JSON.stringify(extractShippingData(shipProfiles), null, 2))
+            setShipProfilesList(() => extractShippingData(shipProfiles))
+
             // setProductList(()=> result.products);
             const productsArray: string[] = products!.split(';');
 
@@ -84,7 +87,7 @@ export default function Home({ searchParams }: { searchParams: { cctester?: stri
                     <p className='relative z-10 text-center w-[60px] bg-white m-auto' >OR</p>
                     <hr className='relative -top-3.5 -z-10 h-[2px] bg-[#cfcfcf]' />
                 </Box>
-                <Form />
+                <Form shipProfilesList={shipProfilesList} />
                 <hr className='h-[2px] bg-[#cfcfcf]' />
                 {/* Footer */}
                 <footer className='mt-10'>
