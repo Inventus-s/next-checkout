@@ -63,6 +63,14 @@ export function removeDuplicateProducts(cartData: CartProduct[]) {
   return filteredCartData;
 }
 
+export const updateSubTotal = (cartData: CartProduct[]) => {
+  let subTotal = 0;
+  cartData.map((item) => {
+    subTotal += item.price * +item.productQty;
+  });
+  return subTotal;
+};
+
 interface CartProduct {
   campaignProductId: number;
   productName: string;

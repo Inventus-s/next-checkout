@@ -3,7 +3,7 @@ import { Box, Flex, Text } from '@radix-ui/themes'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
-import { campaignQuery, isSameCampaignAndVariant } from '../checkout/common'
+import { campaignQuery, isSameCampaignAndVariant, updateSubTotal } from '../checkout/common'
 import Form from './Form'
 import Cart from './components/Cart'
 import CartProducts from './components/CartProducts'
@@ -18,11 +18,10 @@ export default function Home({ searchParams }: { searchParams: { cctester?: stri
     const [shipProfilesList, setShipProfilesList] = useState([]);
     const [cartData, setCartData] = useState<CartProduct[]>([]);
     let shippingMethod: { name: string; price: string }[] = [];
-    let subTotal = 0;
-    let salesTax = 0;
-    let shipping = 0;
-    let discount = 0;
-    let total = 0;
+    const [subTotal, setSubTotal] = useState(0);
+    const [salesTax, setSalesTax] = useState(0);
+    const [shipping, setShipping] = useState(0);
+    const [discount, setDiscount] = useState(0);
 
     useEffect(() => {
         const response = campaignQuery().then((result) => {
@@ -58,7 +57,7 @@ export default function Home({ searchParams }: { searchParams: { cctester?: stri
                                 return [...prev, data];
                             })
                         }
-                        subTotal += variants[0] ? Number(variants[0].price) * Number(quantity) : Number(product.price) * Number(quantity);
+                        // subTotal += variants[0] ? Number(variants[0].price) * Number(quantity) : Number(product.price) * Number(quantity);
                         // console.log("cartData", cartData);
                     }
                 }
@@ -68,7 +67,8 @@ export default function Home({ searchParams }: { searchParams: { cctester?: stri
     }, [])
 
     useEffect(() => {
-        total = subTotal + salesTax + shipping + discount
+        // subTotal
+        setSubTotal(() => updateSubTotal(cartData))
     }, [cartData]);
 
     return (
@@ -107,7 +107,7 @@ export default function Home({ searchParams }: { searchParams: { cctester?: stri
                     <button type="button" className="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-6 py-2.5">Apply</button>
                 </Flex>
                 {/*Cart Table */}
-                <Cart />
+                <Cart subTotal={subTotal} />
                 {/* Vip Box */}
                 <VipDetails />
             </div>

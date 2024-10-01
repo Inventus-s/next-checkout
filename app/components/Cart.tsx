@@ -1,12 +1,30 @@
-import { cartTable } from "../../checkout/data"
+import { useEffect, useState } from "react"
 
-interface CartDetail{
+interface CartDetail {
     cartDetails: CartTable[]
 }
 
-const Cart = () => {
+const Cart = ({ subTotal }: { subTotal: number }) => {
+    const [cartTable, setCartTable] = useState([
+        { name: "Subtotal", price: 0.0 },
+        { name: "Sales Tax", price: 0.0 },
+        { name: "Shipping", price: 0.0 },
+        { name: "Discount", price: 0.0 },
+        { name: "Total", price: 0.0 },
+        // Add more products here...
+    ])
+    useEffect(() => {
+        setCartTable((prev) => {
+            return prev.map((table) => {
+                if (table.name === "Subtotal") {
+                    return { ...table, price: subTotal }
+                }
+                return table;
+            })
+        })
+    }, [subTotal])
     const cartDetails = cartTable
-    
+
     return (
         <table className="w-full mt-5">
             <tbody>
