@@ -1,17 +1,24 @@
+import { removeDuplicateProducts } from '@/checkout/common';
 import Image from 'next/image'
+import { useEffect, useState } from 'react';
 
 interface CartProductsProps {
   cartData: CartProduct[];
 }
 
-const CartProducts = ({ cartData }: { cartData: CartProductsProps }) => {
-  console.log("cartData", cartData);
-
+const CartProducts = ({ cartData }: { cartData: CartProduct[] }) => {
+  // console.log("cartData", JSON.stringify(cartData, null, 2))
+  const [products, setProducts] = useState<CartProduct[]>([]);
+  useEffect(() => {
+    setProducts(() => {
+      return removeDuplicateProducts(cartData)
+    })
+  }, [cartData])
   return (
     <table className='w-full text-sm'>
       <tbody>
         {Array.isArray(cartData) && (
-          cartData.map(({imageUrl, price, productName, productQty, title}, key) => (
+          products.map(({ imageUrl, price, productName, productQty, title }, key) => (
             <tr key={key} className='mb-3' >
               <td className='w-[20%] relative ' >
                 <Image className='border-solid border-[1px] border-[#ccc] rounded p-1 w-[70px]' src={imageUrl} height={'70'} width={'70'} alt="product-img" />

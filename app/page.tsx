@@ -2,7 +2,7 @@
 import { Box, Flex, Text } from '@radix-ui/themes'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { campaignQuery, isSameCampaignAndVariant } from '../checkout/common'
 import Form from './Form'
 import Cart from './components/Cart'
@@ -11,7 +11,7 @@ import FormInput from './components/FormInput'
 import VipDetails from './components/VipDetails'
 
 
-export default async function Home({ searchParams }: { searchParams: { cctester?: string; products?: string } }) {
+export default function Home({ searchParams }: { searchParams: { cctester?: string; products?: string } }) {
     const { cctester, products } = searchParams;
     const [productList, setProductList] = useState([]);
     const [countriesList, setCountriesList] = useState([]);
@@ -42,9 +42,9 @@ export default async function Home({ searchParams }: { searchParams: { cctester?
                         if (variantID) {
                             variants = product.variants.filter(v => v.variantDetailId === Number(variantID));
                         }
-                        console.log("variants", variants);
+                        // console.log("variants", variants);
                         if (!isSameCampaignAndVariant(cartData, product, variants)) {
-                            cartData.push({
+                            const data = {
                                 campaignProductId: product.campaignProductId,
                                 productName: product.productName,
                                 productType: product.productType,
@@ -53,10 +53,13 @@ export default async function Home({ searchParams }: { searchParams: { cctester?
                                 imageUrl: variants[0] ? variants[0].imageUrl : product.imageUrl,
                                 title: variants[0] ? variants[0].title : '',
                                 productQty: quantity
-                            });
+                            }
+                            setCartData((prev) => {
+                                return [...prev, data];
+                            })
                         }
                         subTotal += variants[0] ? Number(variants[0].price) * Number(quantity) : Number(product.price) * Number(quantity);
-                        console.log("cartData", cartData);
+                        // console.log("cartData", cartData);
                     }
                 }
             });
@@ -64,7 +67,9 @@ export default async function Home({ searchParams }: { searchParams: { cctester?
 
     }, [])
 
-
+    useEffect(() => {
+        total = subTotal + salesTax + shipping + discount
+    }, [cartData]);
 
     return (
         // Main Content

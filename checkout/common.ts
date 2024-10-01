@@ -42,6 +42,27 @@ export function isSameCampaignAndVariant(
   );
 }
 
+export function removeDuplicateProducts(cartData: CartProduct[]) {
+  // Create a Set to store the unique keys (combination of campaignProductId and variantId)
+  const uniqueProducts = new Set();
+
+  // Filter cartData by checking if the unique key (productId + variantId) has been seen before
+  const filteredCartData = cartData.filter((product) => {
+    const uniqueKey = `${product.campaignProductId}-${product.variantId}`;
+
+    // If the uniqueKey is already in the Set, it's a duplicate, so we skip it
+    if (uniqueProducts.has(uniqueKey)) {
+      return false; // Duplicate found, filter it out
+    } else {
+      // If not in the Set, add it and keep the product in the filtered array
+      uniqueProducts.add(uniqueKey);
+      return true;
+    }
+  });
+
+  return filteredCartData;
+}
+
 interface CartProduct {
   campaignProductId: number;
   productName: string;
