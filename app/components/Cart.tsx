@@ -4,7 +4,7 @@ interface CartDetail {
     cartDetails: CartTable[]
 }
 
-const Cart = ({ subTotal }: { subTotal: number }) => {
+const Cart = ({ subTotal, salesTax, shipping, discount }: { subTotal: number, salesTax: number, shipping: number, discount: number }) => {
     const [cartTable, setCartTable] = useState([
         { name: "Subtotal", price: 0.0 },
         { name: "Sales Tax", price: 0.0 },
@@ -18,6 +18,18 @@ const Cart = ({ subTotal }: { subTotal: number }) => {
             return prev.map((table) => {
                 if (table.name === "Subtotal") {
                     return { ...table, price: subTotal }
+                }
+                if (table.name === "Sales Tax") {
+                    return { ...table, price: salesTax }
+                }
+                if (table.name === "Shipping") {
+                    return { ...table, price: shipping }
+                }
+                if (table.name === "Discount") {
+                    return { ...table, price: discount }
+                }
+                if (table.name === "Total") {
+                    return { ...table, price: (subTotal + salesTax + shipping + discount) }
                 }
                 return table;
             })
